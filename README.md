@@ -2,10 +2,6 @@
 
 Official code for the paper:
 
-**Alignment-Aware Quantization for LLM Safety**  
-Sunghyun Wee, Juhwan Cho, Seoyeon Park, Nojun Kwak†  
-Department of Electrical and Computer Engineering, Seoul National University
-
 [[Paper (Coming Soon)]()]  
 [[Project Page (TBA)]()]  
 [[License](./LICENSE)]
@@ -14,14 +10,17 @@ Department of Electrical and Computer Engineering, Seoul National University
 
 ## 🧠 Overview
 
-Post-training quantization (PTQ) is widely used to compress large language models (LLMs), but existing methods often ignore safety alignment from RLHF or instruction tuning. As a result, safety behavior may collapse even when perplexity remains stable.
+Standard post-training quantization (PTQ) has emerged as a critical security vulnerability. Malicious actors can distribute seemingly safe models that are intentionally designed to become harmful only after an end-user applies standard quantization. This turns PTQ into an attack vector for activating hidden trojan behaviors, a threat known as alignment degradation.
 
-We propose **Alignment-Aware Quantization (AAQ)**, a novel PTQ framework that integrates a contrastive KL loss to explicitly preserve alignment during quantization. Our method:
-- Steers the quantized model towards the aligned model’s output
-- Pushes it away from the pre-trained base model
-- Is lightweight and data-efficient (only needs calibration data)
+In response, we propose Alignment-Aware Quantization (AAQ), the first defense mechanism integrated directly into the PTQ framework to neutralize this threat. AAQ reframes the quantization objective from simple reconstruction to active alignment preservation.
 
-Tested on the LLaMA family (LLaMA2-Chat, LLaMA3-Instruct, etc.), AAQ achieves high safety performance under 4-bit quantization.
+Our method uses a novel contrastive KL loss to act as a defensive guardrail:
+
+- It steers the quantized model's behavior towards the safe, aligned model (the positive target).
+- It actively pushes the model's behavior away from the unsafe, pre-trained base model (the negative reference).
+- It serves as a lightweight and data-efficient defense that integrates seamlessly into existing PTQ pipelines using only unlabeled calibration data.
+
+Tested on the LLaMA family (LLaMA2-Chat, LLaMA3-Instruct, etc.), AAQ successfully preserves safety alignment under 4-bit quantization, validating its effectiveness as a practical defense against malicious alignment degradation.
 
 ---
 
